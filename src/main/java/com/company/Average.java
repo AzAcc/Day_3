@@ -32,7 +32,6 @@ public class Average {
         job.setInputFormatClass(TextInputFormat.class);
         job.setMapperClass(SalesMapper.class);
         job.setReducerClass(SalesReducer.class);
-        job.setCombinerClass(SalesReducer.class);
         TextOutputFormat.setOutputPath(job, new Path("output/day_3_Average"));
         job.setOutputFormatClass(TextOutputFormat.class);
         job.setOutputKeyClass(Text.class);
