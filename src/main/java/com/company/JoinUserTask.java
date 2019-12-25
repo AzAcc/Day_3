@@ -40,7 +40,8 @@ public class JoinUserTask {
         MultipleInputs.addInputPath(job, usersInputPath, TextInputFormat.class, UserMapper.class);
         MultipleInputs.addInputPath(job, departmentsInputPath, TextInputFormat.class, DepartmentMapper.class);
         job.setReducerClass(NameReducer.class);
-        TextOutputFormat.setOutputPath(job, new Path("output\\doc2.txt"));
+        TextOutputFormat.setOutputPath(job, output);
+
         job.setOutputFormatClass(TextOutputFormat.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
@@ -59,16 +60,6 @@ public class JoinUserTask {
                 return;
             context.write(new Text(parts[4]), new Text("USER"+parts[3]));
 
-//            String repStr = value.toString();
-//            while (repStr.contains(",,")){
-//                repStr = repStr.replace(",,", ",*,");
-//            }
-//            String[] user = repStr.split(",");
-//            if (!user[4].equals("*")) {
-//                context.write(new Text(user[4]), new Text("USER"+user[3]));
-//                System.out.println(user[4]+" "+user[3]);
-//            }
-
         }
     }
 
@@ -79,7 +70,6 @@ public class JoinUserTask {
                     throws IOException, InterruptedException {
                 String[] department = value.toString().split(",");
                 context.write(new Text(department[0]), new Text(department[1]));
-                System.out.println(department[0] +" "+ department[1]);
             }
         }
 
@@ -92,13 +82,13 @@ public class JoinUserTask {
                 String tempTwo = "";
                 for (Text value : values) {
                     if (value.toString().contains("USER")) {
-                        tempTwo = tempTwo+value.toString().substring(4)+"jopa";
+                        tempTwo = tempTwo+value.toString().substring(4)+"fwqoqwfonc";
                     } else {
                         tempOne = value.toString();
                     }
 
                 }
-                String[] splList = tempTwo.split("jopa");
+                String[] splList = tempTwo.split("fwqoqwfonc");
                 if((tempTwo.length()>0)&&(tempOne.length()>0)) {
                     for (String item : splList) {
                         context.write(new Text(tempOne + " : "), new Text(item));

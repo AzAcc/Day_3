@@ -25,7 +25,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         Configuration conf = new Configuration();
-        Path output = new Path("output\\doc2.txt");
+        Path output = new Path("output\\doc2");
         FileSystem hdfs = FileSystem.get(conf);
 
         if (hdfs.exists(output)) {
@@ -34,11 +34,11 @@ public class Main {
 
         Job job = Job.getInstance();
         job.setJarByClass(Main.class);
-        TextInputFormat.addInputPath(job, new Path("input\\logs_example.csv"));
+        TextInputFormat.addInputPath(job, new Path("input\\doc1.txt"));
         job.setInputFormatClass(TextInputFormat.class);
         job.setMapperClass(LoginMapper.class);
         job.setReducerClass(LoginReducer.class);
-        TextOutputFormat.setOutputPath(job, new Path("output\\doc2.txt"));
+        TextOutputFormat.setOutputPath(job, new Path("output\\doc1"));
         job.setOutputFormatClass(TextOutputFormat.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
