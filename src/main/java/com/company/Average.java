@@ -3,6 +3,7 @@ package com.company;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -36,12 +37,13 @@ public class Average {
         job.setOutputFormatClass(TextOutputFormat.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
+        job.setMapOutputValueClass(DoubleWritable.class);
         job.waitForCompletion(true);
 
     }
 
     public static class SalesMapper
-            extends Mapper<LongWritable, Text, Text, Text> {
+            extends Mapper<LongWritable, Text, Text, DoubleWritable> {
         @Override
         protected void map(LongWritable key, Text value, Context context)
                 throws IOException, InterruptedException {
@@ -59,24 +61,23 @@ public class Average {
             }
             String[] parts = curString.split(",");
             String tempDay = "State: "+parts[7]+"| Date: "+parts[0].split(" ")[0]+" | Average Price:";
-            Integer tempPrice = Integer.valueOf(parts[2]);
-            context.write(new Text(tempDay),new Text(tempPrice.toString()));
+            Double tempPrice = Double.valueOf(parts[2]);
+            context.write(new Text(tempDay),new DoubleWritable(tempPrice));
         }
     }
-
     public static class SalesReducer
-            extends Reducer<Text, Text, Text, Text> {
-        protected void reduce(Text key, Iterable<Text> values,
+            extends Reducer<Text, DoubleWritable, Text, DoubleWritable> {
+        protected void reduce(Text key, Iterable<DoubleWritable> values,
                               Context context)
                 throws IOException, InterruptedException {
-            Integer sum = 0;
+            Double sum = 0.0;
             Integer count = 0;
-            for(Text value:values){
-                sum += Integer.valueOf(value.toString());
+            for(DoubleWritable value:values){
+                sum += value.get();
                 count ++;
             }
-            Double avg = sum.doubleValue()/count;
-            context.write(key,new Text(sum.toString()));
+            Double avg = (sum/count);
+            context.write(key,new DoubleWritable(avg));
         }
     }
 }

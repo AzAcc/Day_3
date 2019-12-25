@@ -54,7 +54,7 @@ public class SalesTask {
                 int j = subString.indexOf("\"");
                 subString = subString.substring(0,j);
                 subString = subString.replace(",","");
-                curString = curString.substring(0,i)+subString+curString.substring(i+subString.length()+2);
+                curString = curString.substring(0,i)+subString+curString.substring(i+subString.length()+3);
             }
             String[] parts = curString.split(",");
             context.write(new Text(parts[4]),new Text(parts[3]));
